@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.GridView;
 
 import org.json.JSONArray;
@@ -52,6 +53,7 @@ public class FetchMovieTask extends AsyncTask<String, Void, ArrayList<Movies>> {
                 .appendQueryParameter(APIKEY_PARAM, BuildConfig.OPEN_MOVIE_API_KEY)
                 .build();
 
+        Log.v("Fetach", builtUri.toString());
         HttpURLConnection conn = null;
         try {
             URL url = new URL(builtUri.toString());

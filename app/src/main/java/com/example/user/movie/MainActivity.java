@@ -28,8 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
         gridView = (GridView) findViewById(R.id.gridview);
 
-        //FetchMovieTask fetchMovieTask = new FetchMovieTask(this, list, gridView);
-        //fetchMovieTask.execute();
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,
                                     int position, long id) {
@@ -39,11 +37,10 @@ public class MainActivity extends AppCompatActivity {
                 String release_date = list.get(position).getRelease_date();
                 int vote_average = list.get(position).getVote_average();
                 Intent intent = new Intent(MainActivity.this, SummaryActivity.class);
-                intent.putExtra("imgurl", imgurl);
-                intent.putExtra("title", title);
-                intent.putExtra("overview", overview);
-                intent.putExtra("release_date", release_date);
-                intent.putExtra("vote_average", vote_average);
+                Movies movies = new Movies(title, overview, release_date, vote_average, imgurl);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("movies", movies);
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
@@ -67,7 +64,14 @@ public class MainActivity extends AppCompatActivity {
             setTitle(getString(R.string.movie_popular));
         }
 
-        updateMovies();
+        SharedPreferences sharedPreferences = getSharedPreferences("userInfo", MODE_PRIVATE);
+        String type = sharedPreferences.getString("order", orderType);
+        if (!orderType.equals(type) || list.isEmpty()) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("order", orderType);
+            editor.commit();
+            updateMovies();
+        }
     }
 
     @Override
@@ -96,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateMovies() {
+    public void updateMovies() {
         FetchMovieTask fetchMovieTask = new FetchMovieTask(this, list, gridView);
         fetchMovieTask.execute();
     }

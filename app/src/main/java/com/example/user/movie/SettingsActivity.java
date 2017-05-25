@@ -53,6 +53,7 @@ public class SettingsActivity extends PreferenceActivity implements Preference.O
             // For other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
         }
+
         return true;
     }
 }

@@ -32,15 +32,25 @@ public class ImageAdapter extends BaseAdapter {
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder;
         if (convertView == null) {
             convertView = View.inflate(mContext, R.layout.item, null);
+            viewHolder = new ViewHolder();
+            viewHolder.draweeView = (SimpleDraweeView) convertView.findViewById(R.id.iv_icon);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-        SimpleDraweeView draweeView = (SimpleDraweeView) convertView.findViewById(R.id.iv_icon);
+
         Movies movies = (Movies) getItem(position);
         String imgurl = movies.getImgurl();
         Uri uri = Uri.parse(imgurl);
-        draweeView.setImageURI(uri);
+        viewHolder.draweeView.setImageURI(uri);
 
         return convertView;
+    }
+
+    static class ViewHolder{
+        SimpleDraweeView draweeView;
     }
 }
